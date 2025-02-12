@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  Attendee: one
+  Event: one
+  Room: one
+  confirmation_number: MyString
+
+two:
+  Attendee: two
+  Event: two
+  Room: two
+  confirmation_number: MyString

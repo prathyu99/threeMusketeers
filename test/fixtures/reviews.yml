@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  Attendee: one
+  Event: one
+  rating: 1
+  feedback: MyText
+
+two:
+  Attendee: two
+  Event: two
+  rating: 1
+  feedback: MyText
