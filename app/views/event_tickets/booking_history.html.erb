@@ -1,0 +1,59 @@
+<h1>Booking History</h1>
+
+<table>
+  <thead>
+  <tr>
+    <th>Event Name</th>
+    <th>Date</th>
+    <th>Start Time</th>
+    <th>End Time</th>
+    <th>Location</th>
+    <th>Buyer</th>
+    <th>Recipient</th>
+    <!-- <th>Total Price</th> -->
+    <th>Review</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @completed_event_tickets.each do |event_ticket| %>
+    <tr>
+      <td><%= event_ticket.Event.Name %></td>
+      <td><%= event_ticket.Event.date.strftime("%Y-%m-%d") %></td>
+      <td><%= event_ticket.Event.start_time.strftime("%I:%M%p") %></td>
+      <td><%= event_ticket.Event.end_time.strftime("%I:%M%p") %></td>
+      <td><%= event_ticket.Event.Room.Room_location%></td>
+      <td><%= event_ticket.buyer.name %></td>
+      <td><%= event_ticket.recipient ? event_ticket.recipient.name : 'N/A' %></td>
+      <td>
+        <% if !event_ticket.recipient || event_ticket.recipient.id == current_user.id %>
+          <%= link_to 'Review', new_review_path(event_id: event_ticket.id), class: 'btn btn-primary' %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+  <% @ongoing_event_tickets.each do |event_ticket| %>
+    <tr>
+      <td><%= event_ticket.Event.Name %></td>
+      <td><%= event_ticket.Event.date.strftime("%Y-%m-%d") %></td>
+      <td><%= event_ticket.Event.start_time.strftime("%I:%M%p") %></td>
+      <td><%= event_ticket.Event.end_time.strftime("%I:%M%p") %></td>
+      <td><%= event_ticket.Event.Room.Room_location%></td>
+      <td><%= event_ticket.buyer.name %></td>
+      <td><%= event_ticket.recipient ? event_ticket.recipient.name : 'N/A' %></td>
+
+    </tr>
+  <% end %>
+  <% @unwanted_review.each do |event_ticket| %>
+    <tr>
+      <td><%= event_ticket.Event.Name %></td>
+      <td><%= event_ticket.Event.date.strftime("%Y-%m-%d") %></td>
+      <td><%= event_ticket.Event.start_time.strftime("%I:%M%p") %></td>
+      <td><%= event_ticket.Event.end_time.strftime("%I:%M%p") %></td>
+      <td><%= event_ticket.Event.Room.Room_location%></td>
+      <td><%= event_ticket.buyer.name %></td>
+      <td><%= event_ticket.recipient ? event_ticket.recipient.name : 'N/A' %></td>
+
+    </tr>
+  <% end %>
+  </tbody>
+</table>

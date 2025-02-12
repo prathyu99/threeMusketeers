@@ -1,0 +1,146 @@
+<%= form_with(model: event_ticket, local: true, html: { class: 'event-ticket-form' ,data: { editing: local_assigns[:editing] }}) do |form| %>
+  <% if event_ticket.errors.any? %>
+    <div id="error_explanation">
+      <h2 style="color: red;"><%= pluralize(event_ticket.errors.count, "error") %> prohibited this event_ticket from being saved:</h2>
+      <ul>
+        <% event_ticket.errors.each do |error| %>
+          <li style="color: red;"><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="form-group form-control-limited">
+    <%= form.label :Attendee_email, 'Attendee Email', style: "display: block; margin-bottom: 5px;" %>
+    <%= form.text_field :Attendee_email, value: current_user.Email, placeholder: "Enter Email", class: 'form-control', required: true, type: 'email',readonly: true %>
+  </div>
+  <!-- Button to toggle recipient selection -->
+  <div class="form-group form-control-limited">
+    <%= button_tag 'Buy for someone else', type: 'button', id: 'toggle-recipient-button', class: 'btn btn-primary' %>
+  </div>
+
+  <!-- Initially hidden recipient dropdown -->
+  <div class="form-group form-control-limited" id="recipient-dropdown" style="display: none;">
+    <%= form.label :recipient_id, "Select Recipient", style: "display: block; margin-bottom: 5px;" %>
+
+    <% if local_assigns[:editing] %>
+      <%= form.collection_select :recipient_id, Attendee.all, :id, :Email, { include_blank: 'Select an Attendee' }, { class: "form-control", id: "recipient_select",disabled: local_assigns[:editing]} %>
+      <%= form.hidden_field :Event_id, value: event_ticket.Event_id %>
+    <% else %>
+      <%= form.collection_select :recipient_id, Attendee.all, :id, :Email, { include_blank: 'Select an Attendee' }, { class: "form-control", id: "recipient_select"} %>
+    <% end %>
+    <%= form.hidden_field :Event_id, value: event_ticket.Event_id %>
+  </div>
+
+  <% if local_assigns[:editing] %>
+    <div class="form-group form-control-limited">
+      <%= form.label :Event_id, 'Event Name', style: "display: block; margin-bottom: 5px;" %>
+      <%= form.collection_select :Event_id, Event.all, :id, :Name, { include_blank: true }, { class: "form-control", id: "event_select" } %>
+      <%#= form.text_field :Event_id, value: current_user.Email, placeholder: "Enter Email", class: 'form-control', required: true, type: 'email',readonly: true %>
+    </div>
+  <%else %>
+<!--    <div class="form-group form-control-limited">-->
+      <%#= form.label :Event_id, 'Event Name', style: "display: block; margin-bottom: 5px;" %>
+      <%#= form.collection_select :Event_id, Event.all, :id, :Name, { include_blank: true }, { class: "form-control", id: "event_select",disabled:true } %>
+      <%#= form.hidden_field :Event_id, value: event_ticket.Event_id %>
+      <%#= form.text_field :Event_id, value: current_user.Email, placeholder: "Enter Email", class: 'form-control', required: true, type: 'email',readonly: true %>
+<!--    </div>-->
+<!--    <div class="form-group form-control-limited" style="display: none;">-->
+      <%#= form.label :Event_id, 'Event Name', style: "display: block; margin-bottom: 5px;" %>
+      <%#= form.collection_select :Event_id, Event.all, :id, :Name, { include_blank: true, selected: params[:event_id] }, { class: "form-control", id: "event_select" } %>
+      <%#= form.hidden_field :Event_id, value: event_ticket.Event_id %>
+<!--    </div>-->
+<!--    <div class="form-group form-control-limited">-->
+      <%#= form.label :Event_id, 'Event Name', style: "display: block; margin-bottom: 5px;" %>
+      <%#= form.collection_select :Event_id, Event.all, :id, :Name, { include_blank: true, selected: params[:event_id] }, { class: "form-control", id: "event_select" } %>
+      <%#= form.hidden_field :Event_id %>
+<!--    </div>-->
+    <div class="form-group form-control-limited">
+      <%= form.label :Event_id, 'Event Name', style: "display: block; margin-bottom: 5px;" %>
+      <%# Assuming params[:event_id] contains the ID of the event you want to select %>
+      <% event_to_select = Event.where(id: params[:event_id]) %>
+      <%= form.collection_select :Event_id, event_to_select, :id, :Name, {  selected: params[:event_id] }, { class: "form-control", id: "event_select" } %>
+    </div>
+  <% end %>
+
+
+  <div class="form-group form-control-limited">
+    <%= form.label :no_of_tickets, "Number of Tickets", style: "display: block; margin-bottom: 5px;" %>
+    <%= form.number_field :no_of_tickets, min: 1, class: 'form-control', required: true %>
+  </div>
+
+  <% if local_assigns[:editing] %>
+    <div class="form-group form-control-limited">
+      <%= form.submit 'Edit Ticket', class: 'btn btn-primary' %>
+    </div>
+    <% else  %>
+    <div class="form-group form-control-limited">
+      <%= form.submit 'Create Ticket', class: 'btn btn-primary' %>
+    </div>
+    <% end %>
+  <% end %>
+
+<div id="ticket_cost"></div>
+
+<script>
+    // Add DOMContentLoaded to ensure the DOM is fully loaded before accessing elements
+    document.addEventListener("DOMContentLoaded", function() {
+        var toggleButton = document.querySelector("#toggle-recipient-button");
+        var recipientDropdown = document.querySelector("#recipient-dropdown");
+        var recipientSelect = document.querySelector("#recipient_select");
+
+        toggleButton.addEventListener("click", function() {
+            if (recipientDropdown.style.display === "none") {
+                recipientDropdown.style.display = "block";
+                recipientSelect.required = true; // Make dropdown required
+                toggleButton.textContent = 'Buy for myself';
+            } else {
+                recipientDropdown.style.display = "none";
+                recipientSelect.required = false; // Make dropdown not required
+                recipientSelect.value = ''; // Reset the dropdown
+                toggleButton.textContent = 'Buy for someone else';
+            }
+        });
+
+        // Rest of your existing JavaScript...
+        var noOfTicketsInput = document.querySelector("#event_ticket_no_of_tickets");
+        var ticketCostInput = document.querySelector("#ticket_cost");
+
+        var eventSelect = document.querySelector("#event_select");
+        var form = document.querySelector(".event-ticket-form");
+        var isEditing = form.dataset.editing === "true";
+        document.querySelector("#event_select").disabled = false;
+        if (isEditing) {
+            eventSelect.disabled = true;  // Ensure the dropdown stays disabled
+        }
+
+        // Function to update the display
+        var updateDisplay = function() {
+            var ticketCount = parseFloat(noOfTicketsInput.value) || 0;
+            var eventId = eventSelect.value; // Get the selected event ID
+
+            // Fetch the ticket price for the selected event using the new route
+            fetch(`/events_ticket?event_id=${eventId}`)
+                .then(response => response.json())
+                .then(data => {
+                    var eventAmount = data.ticket_price || 0; // Use the ticket_price from the response
+                    var totalCost = ticketCount * eventAmount;
+                    ticketCostInput.textContent = "Total Cost: $" + totalCost.toFixed(2); // Update the text content for ticket cost
+                })
+                .catch(error => console.error('Error fetching ticket price:', error));
+        };
+
+
+        noOfTicketsInput.addEventListener("input", updateDisplay);
+        eventSelect.addEventListener("change", updateDisplay);
+
+        // Call updateDisplay on page load in case there's an initial value
+        updateDisplay();
+
+    });
+</script>
+
+
+
+
+
+

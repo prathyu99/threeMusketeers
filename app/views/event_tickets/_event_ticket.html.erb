@@ -1,0 +1,43 @@
+<div id="<%= dom_id event_ticket %>">
+  <p>
+    <strong>Attendee:</strong>
+    <% attendee = Attendee.find_by(id: event_ticket.Attendee_id) %>
+    <%= attendee ? attendee.name : "Unknown Attendee" %>
+  </p>
+
+  <p>
+    <strong>Event:</strong>
+    <% event = Event.find_by(id: event_ticket.Event_id) %>
+    <%= event ? event.Name : "Unknown Event" %>
+  </p>
+
+  <p>
+    <strong>Room:</strong>
+    <% room = Room.find_by(id: event_ticket.Room_id) %>
+    <%= room ? room.Room_location : "Unknown Room" %>
+  </p>
+
+  <p>
+    <strong>Confirmation number:</strong>
+    <%= event_ticket.confirmation_number %>
+  </p>
+
+  <!-- New field for displaying the number of tickets -->
+  <p>
+    <strong>Number of Tickets:</strong>
+    <%= event_ticket.no_of_tickets %>
+  </p>
+
+  <p>
+    <strong>Ticket For:</strong>
+    <%= event_ticket.recipient ? event_ticket.recipient.name : 'Self' %>
+  </p>
+
+  <p>
+    <strong>Total Price:</strong>
+    <%# eventp = event.ticket_price %>
+
+    $<%= ticket_price= event_ticket.no_of_tickets*event.ticket_price%>
+  </p>
+
+</div>

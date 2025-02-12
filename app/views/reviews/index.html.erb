@@ -1,0 +1,96 @@
+
+<p style="color: green"><%= notice %></p>
+
+<h1>Reviews</h1>
+<%# if is_admin %>
+  <%#= link_to 'New Review', new_review_path ,class: 'btn btn-primary btn-new-event' %>
+<%# end %>
+
+  <%#= form_with(url: reviews_path, method: :get, local: true) do |form| %>
+    <%# if params[:attendee_id].blank? %>
+<!--      <div class="field">-->
+        <%#= label_tag :attendee_email, 'Search by Attendee Email:' %>
+        <%#= text_field_tag :attendee_email, params[:attendee_email], placeholder: "Enter Attendee's Email" %>
+<!--      </div>-->
+    <%# end %>
+
+<!--    <div class="field">-->
+      <%#= label_tag :event_event_name, 'Search by Attendee Email:' %>
+      <%#= text_field_tag :event_event_name, params[:event_event_name], placeholder: "Enter Attendee's Event Name" %>
+<!--    </div>-->
+    <%#= submit_tag 'Search' %>
+  <%# end %>
+
+<!--<div class="search-section">-->
+<!--  <h2>Search Reviews</h2>-->
+  <%#= form_with(url: reviews_path, method: :get, local: true) do %>
+<!--    <div class="field">-->
+      <%#= label_tag :attendee_email, 'Search by Attendee Email:' %>
+      <%#= text_field_tag :attendee_email, nil, placeholder: "Enter Attendee's Email" %>
+<!--    </div>-->
+
+<!--    <div class="field">-->
+      <%#= label_tag :event_event_name, 'Search by Event Name:' %>
+      <%#= text_field_tag :event_event_name, nil, placeholder: "Enter Event Name" %>
+<!--    </div>-->
+
+    <%#= submit_tag 'Search' %>
+  <%# end %>
+<!--</div>-->
+
+<h2>Search Reviews</h2>
+<%= form_with(url: reviews_path, method: :get, local: true, id: "search-form") do %>
+  <% if params[:attendee_id].blank? %>
+    <div class="field">
+      <%= label_tag :attendee_email, 'Search by Attendee Email:' %>
+      <%= text_field_tag :attendee_email, nil, placeholder: "Enter Attendee's Email", id: "attendee_email" %>
+    </div>
+
+    <div class="field">
+      <%= label_tag :event_event_name, 'Search by Event Name:' %>
+      <%= text_field_tag :event_event_name, nil, placeholder: "Enter Event Name", id: "event_event_name" %>
+    </div>
+
+    <%= submit_tag 'Search', id: "search-submit" %>
+  <%end %>
+
+<% end %>
+<!-- JavaScript to enforce at least one field being filled out -->
+
+
+<table>
+  <thead>
+  <tr>
+<!--    <th>Attendee ID</th>-->
+    <th>Email</th>
+<!--    <th>Event ID</th>-->
+    <th>Event Name</th>
+    <th>Rating</th>
+    <th>Feedback</th>
+    <th colspan="3"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @reviews.each do |review| %>
+    <tr>
+<!--      <td><%#= review.Attendee.id %></td>-->
+      <td><%= review.Attendee.Email %></td>
+<!--      <td><%#= review.Event_id %></td>-->
+      <td><%= review.Event.Name %></td>
+      <td><%= review.rating %></td>
+      <td><%= review.feedback %></td>
+      <% if review.Attendee.id== current_user.id || is_admin%>
+        <td><%= link_to 'Show', review %></td>
+        <td><%= link_to 'Edit', edit_review_path(review) %></td>
+        <td><%= link_to 'Destroy', review, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <%end %>
+
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<%# if is_admin %>
+  <%#= link_to 'New Review', new_review_path,class: 'btn btn-primary btn-new-event'  %>
+<%# end %>

@@ -1,0 +1,53 @@
+<%= form_with(model: attendee) do |form| %>
+  <% if attendee.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(attendee.errors.count, "error") %> prohibited this attendee from being saved:</h2>
+
+      <ul>
+        <% attendee.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <% if flash[:alert] %>
+    <div class="alert alert-warning"><%= flash[:alert] %></div>
+  <% end %>
+  <div>
+    <%= form.label :Email, style: "display: block" %>
+    <%= form.text_field :Email,  disabled: !attendee.new_record? , required: true ,type: 'email'%>
+  </div>
+
+  <div>
+    <%= form.label :Password, style: "display: block" %>
+    <%= form.text_field :Password,  disabled: !attendee.new_record? ,required: true, minlength: 6 %>
+  </div>
+
+
+
+  <div>
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name , required: true%>
+  </div>
+
+  <div>
+    <%= form.label :Phone_number, style: "display: block" %>
+    <%= form.text_field :Phone_number, required: true ,minlength: 10%>
+  </div>
+
+  <div>
+    <%= form.label :Address, style: "display: block" %>
+    <%= form.text_area :Address, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :Credit_card_info, style: "display: block" %>
+    <%= form.text_field :Credit_card_info , required: true%>
+  </div>
+
+
+    <div>
+      <%= form.submit %>
+    </div>
+
+<% end %>

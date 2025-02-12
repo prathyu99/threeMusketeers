@@ -1,0 +1,42 @@
+<div id="<%= dom_id event %>">
+  <p>
+    <strong>Name:</strong>
+    <%= event.Name %>
+  </p>
+
+  <p>
+    <strong>Room:</strong>
+    <%= event.Room_id %>
+  </p>
+
+  <p>
+    <strong>Category:</strong>
+    <%= event.category %>
+  </p>
+
+  <p>
+    <strong>Date:</strong>
+    <%= event.date %>
+  </p>
+
+  <p>
+    <strong>Start time:</strong>
+    <%= event.start_time %>
+  </p>
+
+  <p>
+    <strong>End time:</strong>
+    <%= event.end_time %>
+  </p>
+
+  <p>
+    <strong>Ticket price:</strong>
+    <%= event.ticket_price %>
+  </p>
+
+  <p>
+    <strong>Seats left:</strong>
+    <%= @event.seats_left %>
+  </p>
+
+</div>

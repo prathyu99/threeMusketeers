@@ -1,0 +1,49 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Attendees</h1>
+<% if is_admin %>
+  <%= link_to "New Attendee", new_attendee_path, class: "btn btn-primary" %>
+<% end %>
+<div id="attendees">
+  <% if @attendees.any? %>
+    <table>
+      <thead>
+      <tr>
+        <th>Email</th>
+        <th>Password</th> <!-- Remember, displaying passwords is not secure -->
+        <th>Name</th>
+        <th>Phone number</th>
+        <th>Address</th>
+        <th>Credit card info</th> <!-- Handle credit card info securely -->
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @attendees.each do |attendee| %>
+        <tr>
+          <td><%= attendee.Email %></td>
+          <td>********</td> <!-- Masked for security -->
+          <td><%= attendee.name %></td>
+          <td><%= attendee.Phone_number %></td>
+          <td><%= attendee.Address %></td>
+          <td><%= attendee.Credit_card_info %></td> <!-- Masked for security, showing only last 4 digits -->
+          <td>
+            <%= link_to 'Show', attendee_path(attendee), class: 'btn btn-info' %>
+            <%= link_to 'Edit', edit_attendee_path(attendee), class: 'btn btn-warning' %>
+            <% if attendee.Email!="admin123@gmail.com" %>
+              <%= link_to 'Delete', attendee, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>No attendees found.</p>
+  <% end %>
+</div>
+
+<!-- This link will only be displayed if the current user is an admin -->
+<% if is_admin %>
+  <%= link_to "New Attendee", new_attendee_path, class: "btn btn-primary" %>
+<% end %>

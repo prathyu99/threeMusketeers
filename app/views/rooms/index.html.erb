@@ -1,0 +1,33 @@
+<% if is_admin %>
+  <h1>Rooms</h1>
+
+  <% if @rooms.present? %>
+    <table>
+      <thead>
+      <tr>
+        <th>Room Location</th>
+        <th>Room Capacity</th>
+        <th colspan="3">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @rooms.each do |room| %>
+        <tr>
+          <td><%= room.Room_location %></td>
+          <td><%= room.Room_capacity %></td>
+          <td><%= link_to 'Show', room, class: 'btn btn-info' %></td>
+          <td><%= link_to 'Edit', edit_room_path(room), class: 'btn btn-warning' %></td>
+          <td><%= link_to 'Destroy', room, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>No rooms available.</p>
+  <% end %>
+
+  <%= link_to 'New Room', new_room_path, class: 'btn btn-primary' %>
+<% else %>
+  <p>You are not authorized to view this section.</p>
+<% end %>
+

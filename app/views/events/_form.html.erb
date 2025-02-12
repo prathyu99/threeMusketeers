@@ -1,0 +1,70 @@
+<%= form_with(model: event) do |form| %>
+  <% if event.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(event.errors.count, "error") %> prohibited this event from being saved:</h2>
+
+      <ul>
+        <% event.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :Name, style: "display: block" %>
+    <%= form.text_field :Name , required: true%>
+  </div>
+
+
+
+  <div>
+    <%= form.label :Room_id, "Room location", style: "display: block" ,required: true%>
+    <%= form.collection_select :Room_id, Room.all, :id, :Room_location, include_blank: true, class: "your-css-class" , required: true%>
+  </div>
+
+
+
+  <div>
+    <%= form.label :category, "Category", style: "display: block" %>
+    <%= form.select :category,
+                    options_for_select(['Concerts', 'Sports', 'Arts & Theatre', 'Miscellaneous/Family – Private'],
+                                       event.category),
+                    { include_blank: 'Select Category' },
+                    { class: "your-css-class", style: "display: block" } %>
+  </div>
+
+  <div>
+    <%= form.label :date, style: "display: block" %>
+    <%= form.date_field :date, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :start_time, style: "display: block" %>
+    <%= form.time_field :start_time, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :end_time, style: "display: block" %>
+    <%= form.time_field :end_time, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :ticket_price, style: "display: block" %>
+    <%= form.text_field :ticket_price, required: true %>
+  </div>
+
+  <!--  <div>-->
+  <%#= form.label :seats_left, style: "display: block" %>
+  <%#= form.number_field :seats_left %>
+  <!--  </div>-->
+
+  <!-- Add event_capacity field here -->
+  <div>
+    <%= form.label :event_capacity, "Event Capacity", style: "display: block" %>
+    <%= form.number_field :event_capacity, min: 1 , required: true%>
+  </div>
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,47 @@
+<p style="color: green"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @event.Name %>
+</p>
+
+<p>
+  <strong>Room:</strong>
+  <%= @event.Room.Room_location %>
+</p>
+
+<p>
+  <strong>Category:</strong>
+  <%= @event.category %>
+</p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @event.date.strftime("%B %d, %Y") %>
+</p>
+
+<p>
+  <strong>Start time:</strong>
+  <%= @event.start_time.strftime("%I:%M %p") %>
+</p>
+
+<p>
+  <strong>End time:</strong>
+  <%= @event.end_time.strftime("%I:%M %p") %>
+</p>
+
+<p>
+  <strong>Ticket price:</strong>
+  <%= number_to_currency(@event.ticket_price) %>
+</p>
+
+<p>
+  <strong>Seats left:</strong>
+  <%= @event.seats_left %>
+</p>
+
+<div>
+  <%= link_to "Edit this event", edit_event_path(@event) %> |
+  <%= link_to "Back to events", events_path %>
+  <%= button_to "Destroy this event", @event, method: :delete %>
+</div>

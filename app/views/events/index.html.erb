@@ -1,0 +1,92 @@
+<p style="color: green"><%= notice %></p>
+
+<%= form_with(url: events_path, method: :get, local: true, class: 'form-inline') do |form| %>
+  <div class="form-group mb-2">
+    <%= form.label :category, class: 'sr-only' %>
+    <%= form.text_field :category, value: params[:category], class: 'form-control', placeholder: 'Category' %>
+  </div>
+
+  <div class="form-group mx-sm-3 mb-2">
+    <%= form.label :date, class: 'sr-only' %>
+    <%= form.date_field :date, value: params[:date], class: 'form-control', placeholder: 'Date' %>
+  </div>
+
+  <div class="form-group mb-2">
+    <%= form.label :min_price, 'Minimum Price', class: 'sr-only' %>
+    <%= form.text_field :min_price, value: params[:min_price], class: 'form-control', pattern: '\d*', title: 'Only integer values are allowed', placeholder: 'Min Price' %>
+  </div>
+
+  <div class="form-group mx-sm-3 mb-2">
+    <%= form.label :max_price, 'Maximum Price', class: 'sr-only' %>
+    <%= form.text_field :max_price, value: params[:max_price], class: 'form-control', pattern: '\d*', title: 'Only integer values are allowed', placeholder: 'Max Price' %>
+  </div>
+
+  <div class="form-group mb-2">
+    <%= form.label :name, 'Event Name', class: 'sr-only' %>
+    <%= form.text_field :name, value: params[:name], class: 'form-control', placeholder: 'Event Name' %>
+  </div>
+
+  <%= form.submit 'Search', class: 'btn btn-primary mb-2' %>
+  <%= link_to 'Reset Search', events_path, class: 'btn btn-primary mb-2' %>
+<% end %>
+<% if @events.empty? %>
+  <p>No events found. Please adjust your search criteria.</p>
+<% else %>
+
+  <h1>Events</h1>
+  <% if is_admin %>
+    <%= link_to "New event", new_event_path, class: 'btn btn-primary btn-new-event' %>
+  <% end %>
+
+  <div id="events">
+    <%#= render @events %>
+    <table>
+      <thead>
+      <tr>
+        <% if is_admin %>
+            <th>ID</th>
+        <%end %>
+
+        <th>Name</th>
+        <th>Room</th>
+        <th>Category</th>
+        <th>Date</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+        <th>Ticket Price</th>
+        <th>Seats Left</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @events.each do |event| %>
+        <tr>
+          <% if is_admin %>
+          <td><%= event.id %></td>
+          <%end %>
+          <td><%= event.Name %></td>
+          <td><%= event.Room_id %></td> <!-- Assuming Room_id refers to a Room model -->
+          <!--        <td><%#= event.Room.Room_location %></td>-->
+          <td><%= event.category %></td>
+          <td><%= event.date.strftime("%B %d, %Y") %></td> <!-- Formatting date -->
+          <td><%= event.start_time.strftime("%I:%M %p") %></td> <!-- Formatting time -->
+          <td><%= event.end_time.strftime("%I:%M %p") %></td> <!-- Formatting time -->
+          <td><%= number_to_currency(event.ticket_price) %></td> <!-- Formatting as currency -->
+          <td><%= event.seats_left %></td>
+          <td>
+            <%= link_to 'Show', event, class: 'btn btn-info' %>
+            <%= link_to 'Book', new_event_ticket_path(event_id: event.id), class: 'btn btn-success' %>
+            <% if is_admin %>
+              <%= link_to 'Edit', edit_event_path(event), class: 'btn btn-warning' %>
+              <%= link_to 'Delete', event, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
+<% if is_admin %>
+  <%= link_to "New event", new_event_path, class: 'btn btn-primary btn-new-event' %>
+<% end %>

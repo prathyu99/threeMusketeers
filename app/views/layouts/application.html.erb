@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>WolfEvents</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <%= link_to 'Home page', root_path %>
+
+    <% if flash[:alert] %>
+    <script>
+        alert("<%= j flash[:alert] %>");
+    </script>
+    <% end %>
+
+    <%= yield %>
+  </body>
+</html>

@@ -1,0 +1,10 @@
+<h1>Editing event ticket</h1>
+
+<%= render "form", event_ticket: @event_ticket, editing: @editing  %>
+
+<br>
+
+<div>
+  <%= link_to "Show this event ticket", @event_ticket %> |
+  <%= link_to "Back to event tickets", event_tickets_path %>
+</div>

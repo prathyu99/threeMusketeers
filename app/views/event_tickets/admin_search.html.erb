@@ -1,0 +1,31 @@
+<h1>Booking History</h1>
+<h2>Search Attendees for Event</h2>
+<%= form_with(url: admin_search_path, method: :get, local: true, id: "search-form") do %>
+    <div class="field">
+      <%= label_tag :event_name, 'Search by Event Name:' %>
+      <%= text_field_tag :event_name, nil, placeholder: "Enter Event Name", id: "event_event_name" %>
+    </div>
+    <%= submit_tag 'Search', id: "search-submit" %>
+<%end %>
+
+<% if @show %>
+<table>
+  <thead>
+  <tr>
+    <th>Event Name</th>
+    <th>Buyer</th>
+    <th>Recipient</th>
+    <!-- <th>Total Price</th> -->
+  </tr>
+  </thead>
+  <tbody>
+  <% @event_ticket.each do |event_ticket| %>
+    <tr>
+      <td><%= event_ticket.Event.Name %></td>
+      <td><%= event_ticket.buyer.name %></td>
+      <td><%= event_ticket.recipient ? event_ticket.recipient.name : 'N/A' %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+<% end %>

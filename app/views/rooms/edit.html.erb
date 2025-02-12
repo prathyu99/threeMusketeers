@@ -1,0 +1,10 @@
+<h1>Editing Room</h1>
+
+<%= render 'form', room: @room %>
+
+<hr>
+
+<div>
+  <%= link_to "Show this room", @room, class: 'btn btn-primary' %> |
+  <%= link_to "Back to rooms", rooms_path, class: 'btn btn-info' %>
+</div>

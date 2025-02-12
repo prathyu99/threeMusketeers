@@ -1,0 +1,82 @@
+<%= form_with(model: review) do |form| %>
+  <% if review.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(review.errors.count, "error") %> prohibited this review from being saved:</h2>
+
+      <ul>
+        <% review.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <% if is_admin %>
+  <div>
+    <%= form.label :Attendee_id, style: "display: block" %>
+    <%= form.text_field :Attendee_email, value: current_user.Email, placeholder: "Enter Email", class: 'form-control', required: true, type: 'email' %>
+  </div>
+
+  <div>
+    <%= form.label :Event_id, 'Event Name', style: "display: block; margin-bottom: 5px;" %>
+    <%= form.collection_select :event_id, Event.all, :id, :Name, { include_blank: true, selected: params[:event_id] }, { class: "form-control", id: "event_select" } %>
+  </div>
+  <% else %>
+    <div>
+      <%= form.label :Attendee_id, style: "display: block" %>
+      <%= form.text_field :Attendee_email, value: current_user.Email, placeholder: "Enter Email", class: 'form-control', required: true, type: 'email' , readonly: true %>
+    </div>
+
+    <div>
+      <%= form.label :Event_id, 'Event Name', style: "display: block; margin-bottom: 5px;" %>
+      <%= form.collection_select :event_id, Event.all, :id, :Name, { include_blank: true, selected: params[:event_id] }, { class: "form-control", id: "event_select" , disabled: true} %>
+    </div>
+  <% end %>
+  <div>
+    <%= form.label :rating, style: "display: block" %>
+    <%= form.select :rating, (1..5), { class: "form-control" } %>
+  </div>
+
+  <div>
+    <%= form.label :feedback, style: "display: block" %>
+    <%= form.text_area :feedback,required: true %>
+  </div>
+  <%= form.hidden_field :Event_id, value: nil, id: "event_id_hidden" %>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Function to extract query parameters by name
+        function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name); // Directly use URLSearchParams API
+        }
+
+        // Get 'event_ticket_id' from the URL query parameters
+        const eventTicketId = getQueryParam('event_id');
+
+        // Fetch the corresponding 'event_id' based on 'event_ticket_id'
+        if (eventTicketId) {
+            // Make a request to your backend endpoint to retrieve the 'event_id' associated with the 'event_ticket_id'
+            fetch(`/event_ticket_id?id=${eventTicketId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const eventId = data.Event_id; // Assuming your response contains the 'event_id'
+                    if (eventId) {
+                        // Set the selected value for the 'event_select' dropdown
+                        document.getElementById('event_select').value = eventId;
+                        document.getElementById('event_id_hidden').value = eventId;
+                    }
+                })
+                .catch(error => console.error('Error fetching event id:', error));
+        }
+    });
+</script>

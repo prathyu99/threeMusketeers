@@ -1,0 +1,33 @@
+<div id="<%= dom_id review %>">
+<!--  <p>-->
+<!--    <strong>Attendee:</strong>-->
+    <%#= review.Attendee_id %>
+<!--  </p>-->
+
+<!--  <p>-->
+<!--    <strong>Event:</strong>-->
+    <%#= review.Event_id %>
+<!--  </p>-->
+  <p>
+    <strong>Attendee:</strong>
+    <% attendee = Attendee.find_by(id: review.Attendee_id) %>
+    <%= attendee ? attendee.Email : "Unknown Attendee" %>
+  </p>
+
+  <p>
+    <strong>Event:</strong>
+    <% event = Event.find_by(id: review.Event_id) %>
+    <%= event ? event.Name : "Unknown Event" %>
+  </p>
+
+  <p>
+    <strong>Rating:</strong>
+    <%= review.rating %>
+  </p>
+
+  <p>
+    <strong>Feedback:</strong>
+    <%= review.feedback %>
+  </p>
+
+</div>
